@@ -15,108 +15,264 @@
         }
 
         body {
-            background: #f4f6f8;
+            background: #ffffff;
             color: #333;
+            min-height: 100vh;
         }
 
-        .navbar {
-            background: #222;
-            color: white;
-            padding: 18px 30px;
+        /* =========================
+           LAYOUT UTAMA
+        ========================= */
+
+        .layout {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            min-height: 100vh;
         }
 
-        .navbar h2 {
-            font-size: 20px;
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 194px;
+            min-height: 100vh;
+            background: #126b7a;
+            padding: 18px 13px;
+            flex-shrink: 0;
         }
 
-        .navbar span {
-            font-size: 14px;
-        }
-
-        .container {
-            padding: 30px;
-        }
-
-        .welcome {
-            margin-bottom: 25px;
-        }
-
-        .welcome h1 {
-            margin-bottom: 8px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0,0,0,.06);
-        }
-
-        .card h3 {
-            font-size: 15px;
-            color: #777;
-            margin-bottom: 12px;
-        }
-
-        .card p {
-            font-size: 28px;
-            font-weight: bold;
+        .sidebar-title {
+            color: white;
+            font-size: 22px;
+            font-weight: normal;
+            margin-bottom: 15px;
+            padding-left: 3px;
         }
 
         .menu {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .menu h2 {
-            margin-bottom: 20px;
+        .menu-link {
+            width: 155px;
+            height: 36px;
+            border: 2px solid #79c1cc;
+            border-radius: 7px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding-left: 13px;
+            font-size: 13px;
+            transition: 0.2s;
         }
 
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+        .menu-link:hover {
+            background: #ffffff;
+            color: #126b7a;
         }
 
-        .menu-item {
-            padding: 18px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        .menu-link.active {
+            background: #126b7a;
+            color: white;
         }
 
-        .menu-item strong {
-            display: block;
-            margin-bottom: 5px;
-        }
-
+        /* Tombol keluar */
         .logout {
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
         .logout button {
-            padding: 10px 18px;
-            background: #222;
-            color: white;
+            width: 155px;
+            height: 35px;
             border: none;
-            border-radius: 6px;
+            border-radius: 7px;
+            background: #ff0808;
+            color: white;
+            font-size: 14px;
             cursor: pointer;
         }
 
-        @media (max-width: 800px) {
-            .cards,
-            .menu-grid {
-                grid-template-columns: 1fr 1fr;
+        .logout button:hover {
+            background: #d90000;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            flex: 1;
+            padding: 30px 18px;
+            overflow-x: auto;
+        }
+
+        .page-title {
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 5px;
+            color: #222;
+        }
+
+        /* =========================
+           STATISTIC CARDS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 45px;
+        }
+
+        .stat-card {
+            height: 105px;
+            background: #126b7a;
+            border: 2px solid #111;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-number {
+            font-size: 40px;
+            font-weight: normal;
+            line-height: 42px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        /* =========================
+           GRAFIK
+        ========================= */
+
+        .section-title {
+            color: white;
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+
+        .chart-box {
+            width: 100%;
+            height: 145px;
+            background: #126b7a;
+            border: 2px solid #111;
+            padding: 17px 25px 0;
+            margin-bottom: 30px;
+        }
+
+        .chart {
+            width: 100%;
+            height: 95px;
+            display: block;
+        }
+
+        /* =========================
+           PESANAN TERBARU
+        ========================= */
+
+        .orders-box {
+            width: 100%;
+            background: #126b7a;
+            border: 2px solid #111;
+            padding: 17px 25px 7px;
+        }
+
+        .orders-title {
+            color: white;
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 6px;
+        }
+
+        .table-wrapper {
+            background: white;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 11px;
+        }
+
+        th,
+        td {
+            border: 2px solid #999;
+            height: 25px;
+            padding: 4px 8px;
+            text-align: left;
+        }
+
+        th {
+            color: #222;
+            font-weight: normal;
+            background: #ffffff;
+        }
+
+        td {
+            color: #333;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 180px;
+            }
+
+            .menu-link,
+            .logout button {
+                width: 150px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .sidebar-title {
+                text-align: center;
+            }
+
+            .menu {
+                align-items: center;
+                gap: 10px;
+            }
+
+            .logout {
+                text-align: center;
+            }
+
+            .content {
+                padding: 20px 12px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -124,90 +280,304 @@
 
 <body>
 
-    <div class="navbar">
-        <h2>Basic Industry</h2>
-        <span>Administrator</span>
-    </div>
+<div class="layout">
 
-    <div class="container">
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
 
-        <div class="welcome">
-            <h1>Dashboard Admin</h1>
-            <p>Selamat datang, {{ auth()->user()->name }}.</p>
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            Basic Industry
         </div>
 
-        <div class="cards">
+        <nav class="menu">
 
-            <div class="card">
-                <h3>Total Produk</h3>
-                <p>0</p>
-            </div>
+            <a href="{{ route('admin.dashboard') }}"
+               class="menu-link active">
+                Dashboard
+            </a>
 
-            <div class="card">
-                <h3>Total Stok</h3>
-                <p>0</p>
-            </div>
+            <a href="#" class="menu-link">
+                Kelola Produk
+            </a>
 
-            <div class="card">
-                <h3>Total Customer</h3>
-                <p>0</p>
-            </div>
+            <a href="#" class="menu-link">
+                Kelola Kategori
+            </a>
 
-            <div class="card">
-                <h3>Total Transaksi</h3>
-                <p>0</p>
-            </div>
+            <a href="#" class="menu-link">
+                Kelola Pesanan
+            </a>
 
-        </div>
+            <a href="#" class="menu-link">
+                Kelola Pembayaran
+            </a>
 
-        <div class="menu">
+            <a href="#" class="menu-link">
+                Kelola Diskon
+            </a>
 
-            <h2>Menu Utama</h2>
+            <a href="#" class="menu-link">
+                Kelola Pelanggan
+            </a>
 
-            <div class="menu-grid">
+            <a href="#" class="menu-link">
+                Kelola Laporan
+            </a>
 
-                <div class="menu-item">
-                    <strong>Kategori</strong>
-                    <span>Kelola kategori produk</span>
-                </div>
+        </nav>
 
-                <div class="menu-item">
-                    <strong>Produk</strong>
-                    <span>Kelola data produk</span>
-                </div>
+        <!-- Logout -->
+        <div class="logout">
 
-                <div class="menu-item">
-                    <strong>Stok</strong>
-                    <span>Kelola persediaan produk</span>
-                </div>
+            <form action="{{ route('logout') }}" method="POST">
 
-                <div class="menu-item">
-                    <strong>Customer</strong>
-                    <span>Kelola data pelanggan</span>
-                </div>
+                @csrf
 
-                <div class="menu-item">
-                    <strong>Transaksi</strong>
-                    <span>Kelola transaksi penjualan</span>
-                </div>
+                <button type="submit">
+                    Keluar
+                </button>
 
-                <div class="menu-item">
-                    <strong>Laporan</strong>
-                    <span>Melihat laporan sistem</span>
-                </div>
-
-            </div>
-
-            <div class="logout">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
-            </div>
+            </form>
 
         </div>
 
-    </div>
+    </aside>
+
+
+    <!-- =========================
+         CONTENT
+    ========================== -->
+
+    <main class="content">
+
+        <h1 class="page-title">
+            Dashboard
+        </h1>
+
+
+        <!-- =========================
+             STATISTIK
+        ========================== -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+                    10
+                </div>
+
+                <div class="stat-label">
+                    Stok Produk
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+                    10
+                </div>
+
+                <div class="stat-label">
+                    Pesanan
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+                    10
+                </div>
+
+                <div class="stat-label">
+                    Pelanggan
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+                    10
+                </div>
+
+                <div class="stat-label">
+                    Penjualan
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             GRAFIK PENJUALAN
+        ========================== -->
+
+        <div class="chart-box">
+
+            <h2 class="section-title">
+                Grafik Penjualan
+            </h2>
+
+            <svg
+                class="chart"
+                viewBox="0 0 900 100"
+                preserveAspectRatio="none"
+            >
+
+                <defs>
+
+                    <linearGradient
+                        id="salesGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                    >
+
+                        <stop
+                            offset="0%"
+                            stop-color="#39ff00"
+                        />
+
+                        <stop
+                            offset="55%"
+                            stop-color="#baff00"
+                        />
+
+                        <stop
+                            offset="100%"
+                            stop-color="#ff1500"
+                        />
+
+                    </linearGradient>
+
+                </defs>
+
+
+                <polygon
+                    points="
+                    0,62
+                    45,18
+                    115,65
+                    160,82
+                    205,55
+                    230,12
+                    280,65
+                    300,30
+                    345,75
+                    410,45
+                    455,15
+                    515,78
+                    650,82
+                    700,83
+                    760,86
+                    805,50
+                    840,80
+                    850,20
+                    900,100
+                    0,100
+                    "
+                    fill="url(#salesGradient)"
+                    stroke="white"
+                    stroke-width="4"
+                />
+
+            </svg>
+
+        </div>
+
+
+        <!-- =========================
+             PESANAN TERBARU
+        ========================== -->
+
+        <div class="orders-box">
+
+            <h2 class="orders-title">
+                Pesanan Terbaru
+            </h2>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Nama Pelanggan
+                            </th>
+
+                            <th>
+                                Nama Produk
+                            </th>
+
+                            <th>
+                                Status Pesanan
+                            </th>
+
+                            <th>
+                                Harga Pesanan
+                            </th>
+
+                            <th>
+                                Tanggal Pesan
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
 
 </body>
 </html>

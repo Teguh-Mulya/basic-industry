@@ -16,10 +16,11 @@
 
         body {
             min-height: 100vh;
+            background: #146b7a;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: #f3f4f6;
+            align-items: center;
+            color: white;
         }
 
         .login-container {
@@ -28,84 +29,101 @@
             padding: 20px;
         }
 
-        .login-card {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        /* Judul Basic Industry */
+        .brand {
+            text-align: center;
+            margin-bottom: 42px;
         }
 
-        .logo {
+        .brand h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Kotak login */
+        .login-card {
+            border: 3px solid white;
+            border-radius: 7px;
+            padding: 30px 22px 36px;
+            background: #146b7a;
+        }
+
+        .login-title {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .logo h1 {
-            font-size: 28px;
-            color: #222;
-            margin-bottom: 8px;
+        .login-title h2 {
+            font-size: 20px;
+            font-weight: normal;
+            color: white;
         }
 
-        .logo p {
-            color: #777;
-            font-size: 14px;
-        }
-
+        /* Form */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
             font-size: 14px;
-            font-weight: bold;
-            color: #333;
+            color: white;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 7px;
+            height: 37px;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 6px;
+            background: #d9d9d9;
+            color: #333;
             font-size: 14px;
             outline: none;
         }
 
         .form-group input:focus {
-            border-color: #333;
+            background: #ffffff;
+        }
+
+        /* Tombol */
+        .button-container {
+            text-align: center;
+            margin-top: 32px;
         }
 
         .btn-login {
-            width: 100%;
-            padding: 13px;
+            min-width: 84px;
+            height: 37px;
+            padding: 0 20px;
             border: none;
-            border-radius: 7px;
-            background: #222;
-            color: white;
-            font-size: 15px;
+            border-radius: 6px;
+            background: #d9d9d9;
+            color: #146b7a;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
         }
 
         .btn-login:hover {
-            background: #000;
+            background: white;
         }
 
+        /* Pesan error */
         .error {
-            background: #fee2e2;
-            color: #b91c1c;
-            padding: 12px;
-            border-radius: 7px;
-            margin-bottom: 20px;
-            font-size: 14px;
+            background: #f8d7da;
+            color: #842029;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 18px;
+            font-size: 13px;
         }
 
+        /* Footer */
         .footer {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 13px;
-            color: #888;
+            display: none;
         }
     </style>
 </head>
@@ -114,11 +132,16 @@
 
     <div class="login-container">
 
+        <!-- Nama aplikasi -->
+        <div class="brand">
+            <h1>Basic Industry</h1>
+        </div>
+
+        <!-- Form Login -->
         <div class="login-card">
 
-            <div class="logo">
-                <h1>Basic Industry</h1>
-                <p>Sistem Informasi Basic Industry</p>
+            <div class="login-title">
+                <h2>Masuk</h2>
             </div>
 
             @if ($errors->any())
@@ -131,6 +154,7 @@
 
                 @csrf
 
+                <!-- Email -->
                 <div class="form-group">
                     <label for="email">Email</label>
 
@@ -139,33 +163,31 @@
                         id="email"
                         name="email"
                         value="{{ old('email') }}"
-                        placeholder="Masukkan email"
                         required
                         autofocus
                     >
                 </div>
 
+                <!-- Password -->
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Kata Sandi</label>
 
                     <input
                         type="password"
                         id="password"
                         name="password"
-                        placeholder="Masukkan password"
                         required
                     >
                 </div>
 
-                <button type="submit" class="btn-login">
-                    Login
-                </button>
+                <!-- Tombol -->
+                <div class="button-container">
+                    <button type="submit" class="btn-login">
+                        Masuk
+                    </button>
+                </div>
 
             </form>
-
-            <div class="footer">
-                &copy; {{ date('Y') }} Basic Industry
-            </div>
 
         </div>
 
