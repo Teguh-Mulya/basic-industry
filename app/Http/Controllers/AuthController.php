@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -13,6 +15,29 @@ class AuthController extends Controller
     public function showLogin()
     {
         return view('auth.login');
+    }
+
+    public function showRegister()
+    {
+        return view('auth.customer-register');
+    }
+
+    public function showCustomerLogin()
+    {
+        return view('auth.customer-login');
+    }
+
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'email', 'max:100', 'unique:users,email'],
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
+        $user = User::create(['name' => $data['name'], 'email' => $data['email'], 'password' => Hash::make($data['password']), 'role' => 'customer']);
+        Auth::login($user);
+        $request->session()->regenerate();
+        return redirect()->route('customer.dashboard');
     }
 
     /**
@@ -30,6 +55,11 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
+            if (! in_array($user->role, ['admin', 'pemilik', 'admin_penjualan'], true)) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Akun customer harus menggunakan login customer.'])->onlyInput('email');
+            }
+
             // Arahkan pengguna berdasarkan role
             switch ($user->role) {
                 case 'admin':
@@ -40,9 +70,6 @@ class AuthController extends Controller
 
                 case 'admin_penjualan':
                     return redirect()->route('penjualan.dashboard');
-
-                case 'customer':
-                    return redirect()->route('customer.dashboard');
 
                 default:
                     Auth::logout();
@@ -57,9 +84,23 @@ class AuthController extends Controller
 
         return back()
             ->withErrors([
-                'email' => 'Email atau password salah.',
+                'email' => 'Gunakan login customer untuk akun customer, atau periksa email dan password.',
             ])
             ->onlyInput('email');
+    }
+
+    public function customerLogin(Request $request)
+    {
+        $credentials = $request->validate(['email' => ['required', 'email'], 'password' => ['required']]);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            if (Auth::user()->role !== 'customer') {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Akun ini menggunakan login internal.'])->onlyInput('email');
+            }
+            return redirect()->route('customer.dashboard');
+        }
+        return back()->withErrors(['email' => 'Login customer gagal. Periksa email dan password.'])->onlyInput('email');
     }
 
     /**

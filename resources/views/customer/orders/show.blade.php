@@ -1,0 +1,3 @@
+@include('customer.partials.layout-start', ['title' => 'Detail Pesanan'])
+<h1>Detail Pesanan {{ $order->transaction_code }}</h1><section class="panel"><div class="inner"><p>Tanggal: {{ $order->transaction_date?->format('d/m/Y H:i') }}</p><table><thead><tr><th>Produk</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr></thead><tbody>@foreach($order->details as $detail)<tr><td>{{ $detail->product?->name ?? '-' }}</td><td>{{ $detail->quantity }}</td><td>Rp {{ number_format($detail->price,0,',','.') }}</td><td>Rp {{ number_format($detail->subtotal,0,',','.') }}</td></tr>@endforeach</tbody></table><h3>Total: Rp {{ number_format($order->total_amount,0,',','.') }}</h3></div></section>
+@include('customer.partials.layout-end')

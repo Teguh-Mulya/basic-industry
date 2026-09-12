@@ -1,126 +1,41 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Dashboard Customer - Basic Industry</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: #f4f6f8;
-        }
-
-        .navbar {
-            background: #222;
-            color: white;
-            padding: 18px 30px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .container {
-            padding: 30px;
-        }
-
-        .welcome {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-        }
-
-        .welcome h1 {
-            margin-bottom: 10px;
-        }
-
-        .menu {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0,0,0,.06);
-        }
-
-        .card h2 {
-            margin-bottom: 10px;
-        }
-
-        .card p {
-            color: #666;
-        }
-
-        .logout {
-            margin-top: 25px;
-        }
-
-        button {
-            padding: 10px 18px;
-            background: #222;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="navbar">
-        <strong>Basic Industry</strong>
-        <span>Customer</span>
+@include('customer.partials.layout-start', ['title' => 'Dashboard Customer'])
+<h1>Dashboard</h1>
+<p>Selamat datang, {{ auth()->user()->name }}</p>
+<form class="toolbar" method="GET" action="{{ route('customer.dashboard') }}" style="margin:18px 0 16px">
+    <input name="search" value="{{ $search ?? '' }}" placeholder="Cari Produk">
+    <button class="search-button" type="submit">Cari</button>
+</form>
+<section class="stack">
+    <h2>Produk Terbaru</h2>
+    <div class="product-grid">
+        @forelse ($products as $product)
+            <article class="product-card">
+                <div class="product-card-image">
+                    @if ($product->image)
+                        <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}">
+                    @else
+                        Foto produk
+                    @endif
+                    <div class="product-card-caption">
+                        <div class="product-card-name">{{ $product->name }}</div>
+                        <div class="product-card-meta">Rp {{ number_format($product->price, 0, ',', '.') }} / Stok {{ $product->stock?->quantity ?? 0 }}</div>
+                    </div>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-card-actions">
+                        <form action="{{ route('customer.cart.add') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button class="button" type="submit">Keranjang</button>
+                        </form>
+                        <a class="button" href="{{ route('customer.products.show', $product) }}">Beli</a>
+                    </div>
+                </div>
+            </article>
+        @empty
+            <p>Belum ada produk tersedia.</p>
+        @endforelse
     </div>
-
-    <div class="container">
-
-        <div class="welcome">
-            <h1>Selamat Datang</h1>
-            <p>
-                Halo, {{ auth()->user()->name }}.
-                Selamat datang di Sistem Informasi Basic Industry.
-            </p>
-        </div>
-
-        <div class="menu">
-
-            <div class="card">
-                <h2>Produk</h2>
-                <p>Lihat produk yang tersedia.</p>
-            </div>
-
-            <div class="card">
-                <h2>Pemesanan</h2>
-                <p>Lakukan pemesanan produk.</p>
-            </div>
-
-            <div class="card">
-                <h2>Riwayat Transaksi</h2>
-                <p>Lihat riwayat transaksi Anda.</p>
-            </div>
-
-        </div>
-
-        <div class="logout">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-
-    </div>
-
-</body>
-</html>
+</section>
+@include('customer.partials.layout-end')

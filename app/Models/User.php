@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
+    public function customerProfile()
+    {
+        return $this->hasOne(Customer::class);
+    }
+
     /**
      * Mengecek apakah user memiliki role tertentu.
      */

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard Penjualan - Basic Industry</title>
+    <title>Dashboard Admin Penjualan - Basic Industry</title>
 
     <style>
         * {
@@ -15,158 +15,552 @@
         }
 
         body {
-            background: #f4f6f8;
+            background: #ffffff;
+            color: #333;
         }
 
-        .navbar {
-            background: #222;
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 195px;
+            height: 100vh;
+            background: #126b7b;
             color: white;
-            padding: 18px 30px;
-            display: flex;
-            justify-content: space-between;
+            padding: 18px 13px;
         }
 
-        .container {
-            padding: 30px;
-        }
-
-        .welcome {
-            margin-bottom: 25px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0,0,0,.06);
-        }
-
-        .card h3 {
-            color: #777;
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-
-        .card p {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .transaction {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-        }
-
-        .transaction h2 {
-            margin-bottom: 20px;
+        .sidebar-title {
+            text-align: center;
+            font-size: 23px;
+            margin-bottom: 18px;
+            font-weight: normal;
         }
 
         .menu {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
 
-        .menu-item {
-            border: 1px solid #ddd;
-            padding: 18px;
-            border-radius: 8px;
-        }
-
-        .menu-item strong {
+        .menu a {
             display: block;
-            margin-bottom: 6px;
+            text-decoration: none;
+            color: white;
+            border: 2px solid #8ed0da;
+            border-radius: 7px;
+            padding: 9px 13px;
+            font-size: 14px;
+            transition: 0.2s;
         }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu a.active {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* =========================
+           LOGOUT
+        ========================= */
 
         .logout {
-            margin-top: 25px;
+            position: absolute;
+            bottom: 18px;
+            left: 13px;
+            right: 13px;
         }
 
-        button {
-            padding: 10px 18px;
-            background: #222;
-            color: white;
+        .logout button {
+            width: 100%;
             border: none;
-            border-radius: 6px;
+            border-radius: 7px;
+            padding: 10px;
+            background: #ff1111;
+            color: white;
+            font-size: 14px;
             cursor: pointer;
+        }
+
+        .logout button:hover {
+            background: #d90000;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            margin-left: 195px;
+            padding: 30px 18px;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-size: 16px;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+
+        .user-info {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 12px;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 45px;
+        }
+
+        .card {
+            height: 105px;
+            background: #126b7b;
+            border: 2px solid #111;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .card-number {
+            font-size: 42px;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            margin-top: 0;
+        }
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        .section {
+            background: #126b7b;
+            border: 2px solid #111;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            padding: 15px 25px;
+            font-size: 14px;
+        }
+
+        /* =========================
+           GRAFIK
+        ========================= */
+
+        .graph {
+            height: 145px;
+            position: relative;
+            overflow: hidden;
+            background: #126b7b;
+        }
+
+        .graph svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+            padding: 0 6px 6px 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            color: #333;
+            font-size: 11px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #999;
+            padding: 7px;
+            text-align: left;
+        }
+
+        table th {
+            font-weight: normal;
+            background: #f5f5f5;
+        }
+
+        table td {
+            height: 27px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 180px;
+            }
+
+            .content {
+                margin-left: 180px;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: relative;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                margin-top: 20px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .menu {
+                gap: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="navbar">
-        <strong>Basic Industry</strong>
-        <span>Admin Penjualan</span>
-    </div>
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
 
-    <div class="container">
+    <aside class="sidebar">
 
-        <div class="welcome">
-            <h1>Dashboard Penjualan</h1>
-            <p>Selamat datang, {{ auth()->user()->name }}.</p>
+        <div class="sidebar-title">
+            Basic Industry
         </div>
+
+        <nav class="menu">
+
+            <a href="#" class="active">
+                Dashboard
+            </a>
+
+            <a href="#">
+                Melihat Produk
+            </a>
+
+            <a href="#">
+                Melihat Stok
+            </a>
+
+            <a href="#">
+                Mengelola Pelanggan
+            </a>
+
+            <a href="#">
+                Transaksi Penjualan
+            </a>
+
+            <a href="#">
+                Riwayat Transaksi
+            </a>
+
+        </nav>
+
+
+        <!-- LOGOUT -->
+
+        <div class="logout">
+
+            <form action="{{ route('logout') }}" method="POST">
+
+                @csrf
+
+                <button type="submit">
+                    Keluar
+                </button>
+
+            </form>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         CONTENT
+    ========================== -->
+
+    <main class="content">
+
+        <h1 class="page-title">
+            Dashboard
+        </h1>
+
+        <div class="user-info">
+            Selamat datang, {{ auth()->user()->name }}
+        </div>
+
+
+        <!-- =========================
+             STATISTIC CARDS
+        ========================== -->
 
         <div class="cards">
 
             <div class="card">
-                <h3>Transaksi Hari Ini</h3>
-                <p>0</p>
+
+                <div class="card-number">
+                    0
+                </div>
+
+                <div class="card-title">
+                    Transaksi Hari Ini
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Penjualan Hari Ini</h3>
-                <p>Rp 0</p>
-            </div>
 
             <div class="card">
-                <h3>Customer</h3>
-                <p>0</p>
+
+                <div class="card-number">
+                    0
+                </div>
+
+                <div class="card-title">
+                    Penjualan Hari Ini
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-number">
+                    0
+                </div>
+
+                <div class="card-title">
+                    Pelanggan
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-number">
+                    0
+                </div>
+
+                <div class="card-title">
+                    Produk
+                </div>
+
             </div>
 
         </div>
 
-        <div class="transaction">
 
-            <h2>Menu Penjualan</h2>
+        <!-- =========================
+             GRAFIK PENJUALAN
+        ========================== -->
 
-            <div class="menu">
+        <section class="section">
 
-                <div class="menu-item">
-                    <strong>Transaksi Penjualan</strong>
-                    <span>Input dan proses transaksi.</span>
-                </div>
+            <div class="section-title">
+                Grafik Penjualan
+            </div>
 
-                <div class="menu-item">
-                    <strong>Customer</strong>
-                    <span>Kelola data pelanggan.</span>
-                </div>
+            <div class="graph">
 
-                <div class="menu-item">
-                    <strong>Stok Produk</strong>
-                    <span>Cek ketersediaan produk.</span>
-                </div>
+                <svg
+                    viewBox="0 0 1000 150"
+                    preserveAspectRatio="none"
+                >
+
+                    <defs>
+
+                        <linearGradient
+                            id="gradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                        >
+
+                            <stop
+                                offset="0%"
+                                stop-color="#52ff00"
+                            />
+
+                            <stop
+                                offset="65%"
+                                stop-color="#ffff00"
+                            />
+
+                            <stop
+                                offset="100%"
+                                stop-color="#ff0000"
+                            />
+
+                        </linearGradient>
+
+                    </defs>
+
+
+                    <polygon
+                        points="
+                        0,120
+                        45,50
+                        90,90
+                        135,115
+                        180,80
+                        225,105
+                        270,45
+                        315,90
+                        360,55
+                        405,100
+                        450,75
+                        495,35
+                        540,90
+                        585,95
+                        630,95
+                        675,100
+                        720,100
+                        765,105
+                        810,80
+                        855,110
+                        900,55
+                        945,115
+                        990,50
+                        1000,120
+                        1000,150
+                        0,150
+                        "
+                        fill="url(#gradient)"
+                        stroke="white"
+                        stroke-width="4"
+                    />
+
+                </svg>
 
             </div>
 
-            <div class="logout">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
+        </section>
+
+
+        <!-- =========================
+             TRANSAKSI TERBARU
+        ========================== -->
+
+        <section class="section">
+
+            <div class="section-title">
+                Transaksi Terbaru
             </div>
 
-        </div>
+            <div class="table-container">
 
-    </div>
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Kode Transaksi
+                            </th>
+
+                            <th>
+                                Nama Pelanggan
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Metode Pembayaran
+                            </th>
+
+                            <th>
+                                Tanggal
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </body>
 </html>

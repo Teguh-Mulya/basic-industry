@@ -109,6 +109,78 @@
             overflow-x: auto;
         }
 
+        .product-catalog {
+            margin-top: 30px;
+        }
+
+        .catalog-title {
+            margin-bottom: 14px;
+            color: #222;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .product-card {
+            overflow: hidden;
+            border: 2px solid #111;
+            background: #126b7a;
+        }
+
+        .product-card-image {
+            height: 150px;
+            display: grid;
+            place-items: center;
+            background: #dfe4e5;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .product-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-card-body {
+            padding: 10px;
+            color: white;
+        }
+
+        .product-card-name {
+            overflow: hidden;
+            margin-bottom: 4px;
+            font-size: 14px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product-card-meta {
+            margin-bottom: 9px;
+            color: #e4f8fa;
+            font-size: 12px;
+        }
+
+        .product-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .product-card-actions a {
+            flex: 1;
+            padding: 8px 5px;
+            background: white;
+            color: #222;
+            font-size: 12px;
+            text-align: center;
+            text-decoration: none;
+        }
+
         .page-title {
             font-size: 14px;
             font-weight: normal;
@@ -274,6 +346,14 @@
             .stats {
                 grid-template-columns: 1fr;
             }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card-image {
+                height: 190px;
+            }
         }
     </style>
 </head>
@@ -286,7 +366,9 @@
          SIDEBAR
     ========================== -->
 
-    <aside class="sidebar">
+    @include('admin.partials.sidebar')
+
+    {{--
 
         <div class="sidebar-title">
             Basic Industry
@@ -299,32 +381,32 @@
                 Dashboard
             </a>
 
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.products.index') }}" class="menu-link">
                 Kelola Produk
             </a>
 
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.categories.index') }}" class="menu-link">
                 Kelola Kategori
             </a>
 
-            <a href="#" class="menu-link">
-                Kelola Pesanan
+            <a href="{{ route('admin.stocks.index') }}" class="menu-link">
+                Kelola Stok
             </a>
 
-            <a href="#" class="menu-link">
-                Kelola Pembayaran
-            </a>
-
-            <a href="#" class="menu-link">
-                Kelola Diskon
-            </a>
-
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.customers.index') }}" class="menu-link">
                 Kelola Pelanggan
             </a>
 
-            <a href="#" class="menu-link">
-                Kelola Laporan
+            <a href="{{ route('admin.transactions.index') }}" class="menu-link">
+                Kelola Transaksi
+            </a>
+
+            <a href="{{ route('admin.reports.index') }}" class="menu-link">
+                Laporan Penjualan
+            </a>
+
+            <a href="{{ route('admin.users.index') }}" class="menu-link">
+                Pengguna / Hak Akses
             </a>
 
         </nav>
@@ -344,7 +426,7 @@
 
         </div>
 
-    </aside>
+    </aside> --}}
 
 
     <!-- =========================
@@ -367,7 +449,7 @@
             <div class="stat-card">
 
                 <div class="stat-number">
-                    10
+                    {{ $productCount }}
                 </div>
 
                 <div class="stat-label">
@@ -380,7 +462,7 @@
             <div class="stat-card">
 
                 <div class="stat-number">
-                    10
+                    {{ $orderCount }}
                 </div>
 
                 <div class="stat-label">
@@ -393,7 +475,7 @@
             <div class="stat-card">
 
                 <div class="stat-number">
-                    10
+                    {{ $customerCount }}
                 </div>
 
                 <div class="stat-label">
@@ -406,7 +488,7 @@
             <div class="stat-card">
 
                 <div class="stat-number">
-                    10
+                    Rp {{ number_format($salesTotal, 0, ',', '.') }}
                 </div>
 
                 <div class="stat-label">
@@ -542,31 +624,17 @@
 
 
                     <tbody>
-
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
+                        @forelse ($recentTransactions as $transaction)
+                            <tr>
+                                <td>{{ $transaction->customer?->name ?? 'Umum' }}</td>
+                                <td>-</td>
+                                <td>Selesai</td>
+                                <td>Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
+                                <td>{{ $transaction->transaction_date?->format('d/m/Y') }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5">Belum ada transaksi.</td></tr>
+                        @endforelse
                     </tbody>
 
                 </table>

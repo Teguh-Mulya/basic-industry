@@ -141,7 +141,8 @@
         <div class="login-card">
 
             <div class="login-title">
-                <h2>Masuk</h2>
+                <h2>Login Internal</h2>
+                <p style="margin-top: 8px; font-size: 12px; color: #dff7fa;">Admin, Admin Penjualan, dan Pemilik</p>
             </div>
 
             @if ($errors->any())
@@ -186,6 +187,8 @@
                         Masuk
                     </button>
                 </div>
+
+                <p style="margin-top: 18px; text-align: center; font-size: 13px;"><a href="{{ route('customer.login') }}" style="color: white;">Login Customer</a></p>
 
             </form>
 
