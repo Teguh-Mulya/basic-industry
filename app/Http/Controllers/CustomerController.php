@@ -14,7 +14,7 @@ use Illuminate\View\View;
 
 class CustomerController extends Controller
 {
-    public function dashboard(Request $request): View
+    public function landing(Request $request): View
     {
         $search = trim((string) $request->query('search'));
         $products = Product::with(['category', 'stock'])
@@ -30,6 +30,11 @@ class CustomerController extends Controller
             ->get();
 
         return view('customer.dashboard', compact('products', 'search'));
+    }
+
+    public function dashboard(Request $request): View
+    {
+        return $this->landing($request);
     }
 
     public function products(Request $request): View
@@ -89,7 +94,7 @@ class CustomerController extends Controller
         $cart = session('cart', []); abort_if(empty($cart), 422, 'Keranjang masih kosong.');
         DB::transaction(function () use ($data, $cart) {
             $profile = $this->profileModel();
-            $transaction = Transaction::create(['transaction_code' => 'TRX-'.now()->format('YmdHis').'-'.random_int(100, 999), 'customer_id' => $profile->id, 'user_id' => auth()->id(), 'transaction_date' => now(), 'total_amount' => 0, 'payment_method' => $data['payment_method']]);
+            $transaction = Transaction::create(['transaction_code' => 'TRX-'.now()->format('YmdHis').'-'.random_int(100, 999), 'customer_id' => $profile->id, 'user_id' => auth()->id(), 'transaction_date' => now(), 'total_amount' => 0, 'payment_method' => $data['payment_method'], 'status' => 'Menunggu Persetujuan']);
             $total = 0;
             foreach ($cart as $productId => $quantity) {
                 $product = Product::findOrFail($productId); $stock = Stock::where('product_id', $productId)->lockForUpdate()->first(); abort_if(! $stock || $stock->quantity < $quantity, 422, 'Stok produk tidak mencukupi.');

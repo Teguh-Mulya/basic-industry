@@ -5,6 +5,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SalesController;
+use App\Http\Controllers\OwnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +27,8 @@ Route::post('/customer/register', [AuthController::class, 'register'])->name('cu
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
+
+Route::get('/', [CustomerController::class, 'landing'])->name('home');
 
 
 /*
@@ -84,9 +88,12 @@ Route::middleware(['auth', 'role:pemilik'])
     ->prefix('pemilik')
     ->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('pemilik.dashboard');
-        })->name('pemilik.dashboard');
+        Route::get('/dashboard', [OwnerController::class, 'dashboard'])->name('pemilik.dashboard');
+        Route::get('/products', [OwnerController::class, 'products'])->name('pemilik.products');
+        Route::get('/stocks', [OwnerController::class, 'stocks'])->name('pemilik.stocks');
+        Route::get('/transactions', [OwnerController::class, 'transactions'])->name('pemilik.transactions');
+        Route::get('/reports', [OwnerController::class, 'report'])->name('pemilik.report');
+        Route::get('/reports/print', [OwnerController::class, 'printReport'])->name('pemilik.report.print');
     });
 
 
@@ -100,9 +107,16 @@ Route::middleware(['auth', 'role:admin_penjualan'])
     ->prefix('penjualan')
     ->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('penjualan.dashboard');
-        })->name('penjualan.dashboard');
+        Route::get('/dashboard', [SalesController::class, 'dashboard'])->name('penjualan.dashboard');
+        Route::get('/products', [SalesController::class, 'products'])->name('penjualan.products');
+        Route::get('/stocks', [SalesController::class, 'stocks'])->name('penjualan.stocks');
+        Route::get('/customers', [SalesController::class, 'customers'])->name('penjualan.customers');
+        Route::get('/transactions/create', [SalesController::class, 'createTransaction'])->name('penjualan.transactions.create');
+        Route::post('/transactions', [SalesController::class, 'storeTransaction'])->name('penjualan.transactions.store');
+        Route::get('/transactions', [SalesController::class, 'history'])->name('penjualan.transactions.history');
+        Route::get('/reports', [SalesController::class, 'report'])->name('penjualan.report');
+        Route::get('/orders', [SalesController::class, 'orders'])->name('penjualan.orders');
+        Route::patch('/orders/{transaction}/status', [SalesController::class, 'updateStatus'])->name('penjualan.orders.status');
     });
 
 

@@ -7,11 +7,11 @@
     <style>
         * { box-sizing: border-box; } body { margin: 0; font-family: Arial, sans-serif; color: #333; }
         .layout { display: flex; min-height: 100vh; } main { flex: 1; padding: 30px 22px; overflow-x: auto; }
-        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; } h1 { font-size: 20px; font-weight: normal; }
-        .button, .edit, .delete { display: inline-block; padding: 8px 12px; border: 0; color: white; font-size: 12px; text-decoration: none; cursor: pointer; }
-        .button, .edit { background: #126b7a; } .delete { background: #e31313; } .message { margin-bottom: 14px; padding: 10px; background: #e8f6ea; color: #246b30; }
-        .panel { padding: 16px; border: 2px solid #111; background: #126b7a; } .table-wrap { overflow-x: auto; background: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; } th, td { padding: 10px 12px; border: 1px solid #aaa; text-align: left; vertical-align: top; } th { background: #f2f2f2; font-weight: normal; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; } h1 { color: #263238; font-size: 24px; font-weight: 600; }
+        .button, .edit, .delete { display: inline-block; padding: 8px 12px; border: 0; border-radius: 5px; color: white; font-size: 12px; text-decoration: none; cursor: pointer; }
+        .button, .edit { background: #126b7a; } .delete { background: #e31313; } .message { margin-bottom: 14px; padding: 11px 13px; border-radius: 5px; background: #e8f6ea; color: #246b30; }
+        .panel { padding: 18px; border-radius: 8px; background: #fff; box-shadow: 0 4px 16px rgba(38,50,56,.08); } .table-wrap { overflow-x: auto; background: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; } th, td { padding: 11px 12px; border: 1px solid #d4dadd; text-align: left; vertical-align: top; } th { background: #eef2f3; color: #263238; font-weight: 600; }
         .actions { display: flex; gap: 6px; align-items: center; } .actions form { margin: 0; } .active { color: #16702a; } .inactive { color: #a00000; }
         @media (max-width: 600px) { .layout { display: block; } main { padding: 20px 12px; } .header { align-items: stretch; flex-direction: column; gap: 12px; } }
     </style>

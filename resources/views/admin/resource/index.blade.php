@@ -11,11 +11,11 @@
         nav a { padding: 9px 10px; border: 1px solid #79c1cc; border-radius: 5px; color: #fff; text-decoration: none; font-size: 13px; }
         nav a:hover, nav a.active { background: #fff; color: #126b7a; } .logout { margin-top: 20px; }
         .logout button { width: 100%; padding: 9px; border: 0; border-radius: 5px; background: #e31313; color: #fff; cursor: pointer; }
-        main { flex: 1; padding: 30px 22px; overflow-x: auto; } h1 { margin: 0 0 20px; font-size: 20px; font-weight: normal; }
-        .panel { border: 2px solid #111; background: #126b7a; padding: 16px; } .table-wrap { overflow-x: auto; background: #fff; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; } th, td { padding: 10px 12px; border: 1px solid #aaa; text-align: left; white-space: nowrap; }
-        .page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; } th { background: #f2f2f2; font-weight: normal; } .empty { padding: 18px; text-align: center; color: #666; }
-        .button, .edit, .delete { display: inline-block; padding: 7px 11px; border: 0; color: #fff; text-decoration: none; font-size: 12px; cursor: pointer; } .button, .edit { background: #126b7a; } .delete { background: #e31313; } .actions { display: flex; gap: 6px; align-items: center; } .actions form { margin: 0; } .message { margin-bottom: 14px; padding: 10px; border: 1px solid; } .success { border-color: #5ca66a; color: #246b30; background: #e8f6ea; } .error { border-color: #d66; color: #9b2222; background: #fff0f0; }
+        main { flex: 1; padding: 30px 22px; overflow-x: auto; } h1 { margin: 0 0 20px; color: #263238; font-size: 24px; font-weight: 600; }
+        .panel { padding: 18px; border-radius: 8px; background: #fff; box-shadow: 0 4px 16px rgba(38,50,56,.08); } .table-wrap { overflow-x: auto; background: #fff; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; } th, td { padding: 11px 12px; border: 1px solid #d4dadd; text-align: left; white-space: nowrap; }
+        .page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; } th { background: #eef2f3; color: #263238; font-weight: 600; } .empty { padding: 18px; text-align: center; color: #607177; }
+        .button, .edit, .delete { display: inline-block; padding: 8px 12px; border: 0; border-radius: 5px; color: #fff; text-decoration: none; font-size: 12px; cursor: pointer; } .button, .edit { background: #126b7a; } .delete { background: #e31313; } .actions { display: flex; gap: 6px; align-items: center; } .actions form { margin: 0; } .message { margin-bottom: 14px; padding: 11px 13px; border-radius: 5px; border: 1px solid; } .success { border-color: #5ca66a; color: #246b30; background: #e8f6ea; } .error { border-color: #d66; color: #9b2222; background: #fff0f0; }
         @media (max-width: 650px) { .layout { display: block; } .sidebar { width: 100%; } main { padding: 20px 12px; } nav { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>

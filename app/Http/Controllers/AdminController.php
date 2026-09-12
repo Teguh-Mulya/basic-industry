@@ -18,7 +18,17 @@ class AdminController extends Controller
 {
     public function dashboard(): View
     {
-        return view('admin.dashboard', ['productCount' => Product::count(), 'orderCount' => Transaction::count(), 'customerCount' => Customer::count(), 'salesTotal' => Transaction::sum('total_amount'), 'recentTransactions' => Transaction::with('customer')->latest('transaction_date')->limit(5)->get()]);
+        $startMonth = now()->startOfMonth()->subMonths(5);
+        $monthlySales = collect(range(0, 5))->map(function (int $offset) use ($startMonth) {
+            $month = $startMonth->copy()->addMonths($offset);
+
+            return [
+                'label' => $month->translatedFormat('M Y'),
+                'total' => (float) Transaction::whereBetween('transaction_date', [$month->copy()->startOfMonth(), $month->copy()->endOfMonth()])->sum('total_amount'),
+            ];
+        });
+
+        return view('admin.dashboard', ['productCount' => Product::count(), 'orderCount' => Transaction::count(), 'customerCount' => Customer::count(), 'salesTotal' => Transaction::sum('total_amount'), 'recentTransactions' => Transaction::with('customer')->latest('transaction_date')->limit(5)->get(), 'monthlySales' => $monthlySales, 'monthlySalesMax' => max(1, $monthlySales->max('total'))]);
     }
 
     public function products(Request $request): View

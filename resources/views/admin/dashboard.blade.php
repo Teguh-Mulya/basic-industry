@@ -196,29 +196,34 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            margin-bottom: 45px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
-            height: 105px;
-            background: #126b7a;
-            border: 2px solid #111;
-            color: white;
-            text-align: center;
+            min-height: 105px;
+            padding: 18px;
+            border-left: 4px solid #126b7a;
+            border-radius: 7px;
+            background: #fff;
+            color: #263238;
+            text-align: left;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            box-shadow: 0 4px 16px rgba(38,50,56,.08);
         }
 
         .stat-number {
-            font-size: 40px;
-            font-weight: normal;
-            line-height: 42px;
+            color: #126b7a;
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 1.25;
         }
 
         .stat-label {
-            font-size: 13px;
-            margin-top: 2px;
+            margin-top: 8px;
+            color: #607177;
+            font-size: 12px;
         }
 
         /* =========================
@@ -226,26 +231,41 @@
         ========================= */
 
         .section-title {
-            color: white;
-            font-size: 14px;
-            font-weight: normal;
+            color: #263238;
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 10px;
         }
 
         .chart-box {
             width: 100%;
-            height: 145px;
-            background: #126b7a;
-            border: 2px solid #111;
-            padding: 17px 25px 0;
+            min-height: 205px;
+            border-radius: 8px;
+            background: #fff;
+            padding: 17px 25px 12px;
             margin-bottom: 30px;
+            box-shadow: 0 4px 16px rgba(38,50,56,.08);
         }
 
         .chart {
             width: 100%;
-            height: 95px;
+            height: 120px;
             display: block;
         }
+
+        .chart-labels {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin-top: 4px;
+            color: #607177;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .chart-labels span { display: grid; gap: 3px; min-width: 0; }
+        .chart-labels strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+        .chart-labels small { overflow: hidden; color: #126b7a; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
 
         /* =========================
            PESANAN TERBARU
@@ -253,15 +273,16 @@
 
         .orders-box {
             width: 100%;
-            background: #126b7a;
-            border: 2px solid #111;
-            padding: 17px 25px 7px;
+            padding: 18px;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(38,50,56,.08);
         }
 
         .orders-title {
-            color: white;
-            font-size: 14px;
-            font-weight: normal;
+            color: #263238;
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 6px;
         }
 
@@ -274,21 +295,21 @@
             width: 100%;
             border-collapse: collapse;
             background: white;
-            font-size: 11px;
+            font-size: 13px;
         }
 
         th,
         td {
-            border: 2px solid #999;
-            height: 25px;
-            padding: 4px 8px;
+            border: 1px solid #d4dadd;
+            height: auto;
+            padding: 11px 12px;
             text-align: left;
         }
 
         th {
-            color: #222;
-            font-weight: normal;
-            background: #ffffff;
+            color: #263238;
+            font-weight: 600;
+            background: #eef2f3;
         }
 
         td {
@@ -548,26 +569,10 @@
 
                 <polygon
                     points="
-                    0,62
-                    45,18
-                    115,65
-                    160,82
-                    205,55
-                    230,12
-                    280,65
-                    300,30
-                    345,75
-                    410,45
-                    455,15
-                    515,78
-                    650,82
-                    700,83
-                    760,86
-                    805,50
-                    840,80
-                    850,20
-                    900,100
-                    0,100
+                    @foreach ($monthlySales as $index => $month)
+                        {{ $index * 180 }},{{ 90 - (($month['total'] / $monthlySalesMax) * 75) }}
+                    @endforeach
+                    900,100 0,100
                     "
                     fill="url(#salesGradient)"
                     stroke="white"
@@ -575,6 +580,12 @@
                 />
 
             </svg>
+
+            <div class="chart-labels">
+                @foreach ($monthlySales as $month)
+                    <span title="{{ $month['label'] }}: Rp {{ number_format($month['total'], 0, ',', '.') }}"><strong>{{ $month['label'] }}</strong><small>Rp {{ number_format($month['total'], 0, ',', '.') }}</small></span>
+                @endforeach
+            </div>
 
         </div>
 

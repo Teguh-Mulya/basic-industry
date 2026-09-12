@@ -7,12 +7,12 @@
     <style>
         * { box-sizing: border-box; } body { margin: 0; font-family: Arial, sans-serif; color: #333; background: #fff; }
         .layout { display: flex; min-height: 100vh; } .content { flex: 1; min-width: 0; padding: 30px 22px; overflow-x: auto; }
-        .header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; } h1 { font-size: 20px; font-weight: normal; }
-        .search { width: 250px; padding: 9px 10px; border: 2px solid #555; font-size: 13px; } .panel { padding: 16px; border: 2px solid #111; background: #126b7a; }
+        .header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; } h1 { color: #263238; font-size: 24px; font-weight: 600; }
+        .search { width: 250px; padding: 10px 11px; border: 1px solid #aab6ba; border-radius: 4px; color: #263238; font-size: 13px; } .search:focus { border-color: #126b7a; outline: 2px solid rgba(18,107,122,.15); } .panel { padding: 18px; border-radius: 8px; background: #fff; box-shadow: 0 4px 16px rgba(38,50,56,.08); }
         .table-wrap { overflow-x: auto; background: #fff; } table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th, td { padding: 10px 12px; border: 1px solid #aaa; text-align: left; white-space: nowrap; } th { background: #f2f2f2; font-weight: normal; }
+        th, td { padding: 11px 12px; border: 1px solid #d4dadd; text-align: left; white-space: nowrap; } th { background: #eef2f3; color: #263238; font-weight: 600; }
         .active { color: #16702a; font-weight: bold; } .empty { padding: 18px; color: #666; text-align: center; }
-        .note { margin-bottom: 14px; padding: 10px; background: #e8f6ea; color: #246b30; font-size: 13px; }
+        .note { margin-bottom: 14px; padding: 11px 13px; border-radius: 5px; background: #e8f6ea; color: #246b30; font-size: 13px; }
         @media (max-width: 600px) { .layout { display: block; } .content { padding: 20px 12px; } .header { align-items: stretch; flex-direction: column; } .search { width: 100%; } }
     </style>
 </head>

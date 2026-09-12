@@ -6,11 +6,11 @@
     <title>{{ $title }} - Basic Industry</title>
     <style>
         * { box-sizing: border-box; } body { margin: 0; font-family: Arial, sans-serif; color: #333; background: #fff; }
-        .layout { display: flex; min-height: 100vh; } .content { flex: 1; padding: 30px 22px; } h1 { margin: 0 0 20px; font-size: 20px; font-weight: normal; }
-        .form-panel { max-width: 760px; border: 2px solid #111; background: #126b7a; padding: 20px 25px; } .field { margin-bottom: 14px; } label { display: block; margin-bottom: 6px; color: white; font-size: 13px; }
-        input, select, textarea { width: 100%; padding: 9px; border: 1px solid #999; font: inherit; } textarea { min-height: 90px; resize: vertical; } .form-actions { display: flex; gap: 8px; margin-top: 20px; }
-        button, .cancel { padding: 9px 15px; border: 0; color: white; text-decoration: none; cursor: pointer; font-size: 13px; } button { background: #126b7a; } .cancel { background: #777; }
-        .error { margin-bottom: 15px; padding: 10px; background: #ffe4e4; color: #8b0000; } @media (max-width: 650px) { .layout { display: block; } .content { padding: 20px 12px; } }
+        .layout { display: flex; min-height: 100vh; } .content { flex: 1; padding: 30px 22px; } h1 { margin: 0 0 20px; color: #263238; font-size: 24px; font-weight: 600; }
+        .form-panel { max-width: 760px; padding: 22px; border-radius: 8px; background: #fff; box-shadow: 0 4px 16px rgba(38,50,56,.08); } .field { margin-bottom: 16px; } label { display: block; margin-bottom: 7px; color: #526166; font-size: 13px; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 10px 11px; border: 1px solid #aab6ba; border-radius: 4px; color: #263238; background: #fff; font: inherit; } input:focus, select:focus, textarea:focus { border-color: #126b7a; outline: 2px solid rgba(18,107,122,.15); } textarea { min-height: 90px; resize: vertical; } .form-actions { display: flex; gap: 8px; margin-top: 20px; }
+        button, .cancel { padding: 10px 15px; border: 0; border-radius: 5px; color: white; text-decoration: none; cursor: pointer; font-size: 13px; } button { background: #126b7a; } button:hover { background: #0e5967; } .cancel { background: #607177; }
+        .error { margin-bottom: 15px; padding: 11px 13px; border-radius: 5px; background: #fff0f0; color: #8b0000; } @media (max-width: 650px) { .layout { display: block; } .content { padding: 20px 12px; } .form-panel { padding: 16px; } .form-actions { flex-direction: column; } .form-actions button, .form-actions .cancel { width: 100%; text-align: center; } }
     </style>
 </head>
 <body>

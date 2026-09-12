@@ -1,0 +1,8 @@
+@include('penjualan.partials.layout-start', ['title' => $heading])
+<h1>{{ $heading }}</h1>
+<section class="sales-panel"><div class="sales-table-wrap"><table class="sales-table"><thead><tr><th>Kode</th><th>Pelanggan</th><th>Tanggal</th><th>Total</th><th>Pembayaran</th><th>Status</th></tr></thead><tbody>
+@forelse ($transactions as $transaction)
+<tr><td>{{ $transaction->transaction_code }}</td><td>{{ $transaction->customer?->name ?? 'Umum' }}</td><td>{{ $transaction->transaction_date?->format('d/m/Y H:i') }}</td><td>Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td><td>{{ $transaction->payment_method }}</td><td>{{ $transaction->status ?: 'Menunggu Persetujuan' }}</td></tr>
+@empty <tr><td colspan="6">Belum ada transaksi.</td></tr> @endforelse
+</tbody></table></div></section>
+@include('penjualan.partials.layout-end')

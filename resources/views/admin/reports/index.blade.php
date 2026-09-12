@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Penjualan - Basic Industry</title>
     <style>
-        * { box-sizing: border-box; } body { margin: 0; font-family: Arial, sans-serif; color: #333; }
+        * { box-sizing: border-box; } body { margin: 0; font-family: Arial, sans-serif; color: #263238; background: #f5f7f8; }
         .layout { display: flex; min-height: 100vh; } .sidebar { position: fixed; left: 0; top: 0; width: 195px; height: 100vh; padding: 18px 13px; background: #126b7b; color: white; }
         .sidebar-title { margin-bottom: 18px; text-align: center; font-size: 23px; font-weight: normal; } .menu { display: flex; flex-direction: column; gap: 18px; }
         .menu a { display: block; padding: 9px 13px; border: 2px solid #8ed0da; border-radius: 7px; color: white; font-size: 14px; text-decoration: none; }
         .menu a:hover, .menu a.active { background: rgba(255,255,255,0.15); } .logout { position: absolute; right: 13px; bottom: 18px; left: 13px; }
         .logout button { width: 100%; padding: 10px; border: 0; border-radius: 7px; background: #ff1111; color: white; cursor: pointer; }
         .content { flex: 1; min-height: 100vh; margin-left: 195px; padding: 30px 18px; } main { padding: 0; }
-        h1 { font-size: 22px; font-weight: normal; } .summary { margin: 20px 0; padding: 15px; background: #126b7a; color: white; }
-        table { width: 100%; border-collapse: collapse; } th, td { padding: 9px; border: 1px solid #aaa; text-align: left; } th { background: #f1f1f1; font-weight: normal; }
-        .print { display: inline-block; margin-bottom: 18px; padding: 9px 14px; background: #126b7a; color: white; text-decoration: none; }
+        h1 { color: #263238; font-size: 24px; font-weight: 600; } .summary { margin: 20px 0; padding: 16px; border-left: 4px solid #126b7a; border-radius: 7px; background: #fff; color: #126b7a; box-shadow: 0 4px 16px rgba(38,50,56,.08); }
+        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 4px 16px rgba(38,50,56,.08); } th, td { padding: 11px 12px; border: 1px solid #d4dadd; text-align: left; } th { background: #eef2f3; color: #263238; font-weight: 600; }
+        .print { display: inline-block; margin-bottom: 18px; padding: 10px 14px; border-radius: 5px; background: #126b7a; color: white; text-decoration: none; }
     </style>
 </head>
 <body><div class="layout">
