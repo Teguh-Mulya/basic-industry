@@ -1,6 +1,6 @@
-# =========================
+# ==========================================
 # Stage 1: Build Frontend
-# =========================
+# ==========================================
 FROM node:24-alpine AS frontend
 
 WORKDIR /app
@@ -14,9 +14,9 @@ COPY . .
 RUN npm run build
 
 
-# =========================
-# Stage 2: Install Composer
-# =========================
+# ==========================================
+# Stage 2: Install PHP Dependencies
+# ==========================================
 FROM composer:2.8 AS vendor
 
 WORKDIR /app
@@ -38,14 +38,14 @@ RUN composer dump-autoload \
     --no-dev
 
 
-# =========================
-# Stage 3: Laravel Runtime
-# =========================
+# ==========================================
+# Stage 3: Laravel Application
+# ==========================================
 FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-# Install system dependencies
+# Install PHP extensions and dependencies
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
@@ -73,43 +73,33 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Enable Apache rewrite
 RUN a2enmod rewrite
 
-
-# Configure Apache to use Laravel public directory
+# Set Laravel public directory as Apache document root
 RUN sed -ri \
     -e 's!/var/www/html!/var/www/html/public!g' \
     /etc/apache2/sites-available/000-default.conf \
     /etc/apache2/apache2.conf
 
-# Render uses port 10000 by default
-RUN sed -ri 's/Listen 80/Listen 10000/g' /etc/apache2/ports.conf \
-    && sed -ri 's/<VirtualHost \*:80>/<VirtualHost *:10000>/g' \
-    /etc/apache2/sites-available/000-default.conf
-
-
 # Copy Laravel application
 COPY --from=vendor /app /var/www/html
 
-# Copy compiled frontend assets
+# Copy Vite production build
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
-
-# Copy startup script
+# Copy Railway startup script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 
 # Laravel permissions
 RUN chown -R www-data:www-data \
     /var/www/html/storage \
     /var/www/html/bootstrap/cache
 
-
-EXPOSE 10000
+# Railway will provide the actual PORT
+EXPOSE 8080
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
