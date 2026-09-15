@@ -1,5 +1,5 @@
 # ============================================================
-# STAGE 1 - Build Frontend
+# STAGE 1 - FRONTEND
 # ============================================================
 FROM node:22-alpine AS frontend
 
@@ -19,7 +19,7 @@ RUN npm run build
 
 
 # ============================================================
-# STAGE 2 - Install PHP Dependencies
+# STAGE 2 - COMPOSER DEPENDENCIES
 # ============================================================
 FROM composer:2.8 AS vendor
 
@@ -43,7 +43,7 @@ RUN composer dump-autoload \
 
 
 # ============================================================
-# STAGE 3 - Laravel Application
+# STAGE 3 - LARAVEL + APACHE
 # ============================================================
 FROM php:8.2-apache
 
@@ -51,7 +51,7 @@ WORKDIR /var/www/html
 
 
 # ============================================================
-# Install PHP Extensions
+# PHP EXTENSIONS
 # ============================================================
 RUN apt-get update && apt-get install -y \
     libicu-dev \
@@ -82,15 +82,17 @@ RUN apt-get update && apt-get install -y \
 
 
 # ============================================================
-# FIX APACHE MPM
+# APACHE MPM
 # ============================================================
-RUN a2dismod mpm_event mpm_worker mpm_prefork || true \
+# Pastikan hanya mpm_prefork yang aktif.
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
+          /etc/apache2/mods-enabled/mpm_*.conf \
     && a2enmod mpm_prefork \
     && a2enmod rewrite
 
 
 # ============================================================
-# Apache Virtual Host
+# APACHE CONFIGURATION
 # ============================================================
 RUN printf '%s\n' \
     '<VirtualHost *:80>' \
@@ -109,19 +111,19 @@ RUN printf '%s\n' \
 
 
 # ============================================================
-# Copy Laravel Application
+# LARAVEL APPLICATION
 # ============================================================
 COPY --from=vendor /app /var/www/html
 
 
 # ============================================================
-# Copy Vite Build
+# VITE BUILD
 # ============================================================
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
 
 # ============================================================
-# Copy Entrypoint
+# ENTRYPOINT
 # ============================================================
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
@@ -129,7 +131,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 
 # ============================================================
-# Laravel Permission
+# LARAVEL DIRECTORY
 # ============================================================
 RUN mkdir -p \
     /var/www/html/storage/framework/cache \
@@ -143,13 +145,13 @@ RUN mkdir -p \
 
 
 # ============================================================
-# Railway Port
+# RAILWAY PORT
 # ============================================================
 EXPOSE 8080
 
 
 # ============================================================
-# Start Container
+# START
 # ============================================================
 ENTRYPOINT ["docker-entrypoint.sh"]
 

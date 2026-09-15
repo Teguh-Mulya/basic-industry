@@ -10,7 +10,7 @@ cd /var/www/html
 
 
 # ============================================================
-# Railway PORT
+# RAILWAY PORT
 # ============================================================
 PORT=${PORT:-8080}
 
@@ -18,9 +18,9 @@ echo "Using PORT: $PORT"
 
 
 # ============================================================
-# Configure Apache Port
+# APACHE PORT
 # ============================================================
-echo "Configuring Apache..."
+echo "Configuring Apache port..."
 
 sed -ri "s/^Listen [0-9]+/Listen ${PORT}/" \
     /etc/apache2/ports.conf
@@ -30,7 +30,7 @@ sed -ri "s/<VirtualHost \*:[0-9]+>/<VirtualHost *:${PORT}>/" \
 
 
 # ============================================================
-# Laravel Storage
+# LARAVEL STORAGE
 # ============================================================
 echo "Preparing Laravel storage..."
 
@@ -42,7 +42,7 @@ mkdir -p bootstrap/cache
 
 
 # ============================================================
-# Permission
+# PERMISSION
 # ============================================================
 echo "Setting Laravel permissions..."
 
@@ -52,23 +52,31 @@ chown -R www-data:www-data \
 
 
 # ============================================================
-# Storage Link
+# STORAGE LINK
 # ============================================================
 echo "Checking storage link..."
 
-if [ ! -L public/storage ]; then
-    echo "Creating storage link..."
-    php artisan storage:link || true
-else
+if [ -L public/storage ]; then
+
     echo "Storage link already exists."
+
+elif [ -e public/storage ]; then
+
+    echo "public/storage exists but is not a symbolic link."
+
+else
+
+    echo "Creating storage link..."
+
+    php artisan storage:link || true
+
 fi
 
 
 # ============================================================
-# Database Migration
+# DATABASE CONNECTION
 # ============================================================
 echo "Waiting for database..."
-
 
 MAX_ATTEMPTS=30
 ATTEMPT=1
@@ -76,11 +84,15 @@ ATTEMPT=1
 while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
 
     if php artisan migrate:status > /dev/null 2>&1; then
+
         echo "Database connection successful."
+
         break
+
     fi
 
-    echo "Database is not ready. Attempt $ATTEMPT/$MAX_ATTEMPTS..."
+    echo "Database is not ready."
+    echo "Attempt $ATTEMPT/$MAX_ATTEMPTS..."
 
     ATTEMPT=$((ATTEMPT + 1))
 
@@ -90,7 +102,7 @@ done
 
 
 # ============================================================
-# Run Migration
+# DATABASE MIGRATION
 # ============================================================
 if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
 
@@ -102,13 +114,13 @@ if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
 
 else
 
-    echo "WARNING: Database is not available."
+    echo "WARNING: Database connection failed."
 
 fi
 
 
 # ============================================================
-# Laravel Configuration Cache
+# LARAVEL CONFIG CACHE
 # ============================================================
 echo "Caching Laravel configuration..."
 
@@ -118,6 +130,16 @@ echo "Laravel is ready."
 
 
 # ============================================================
-# Start Apache
+# APACHE CONFIG CHECK
 # ============================================================
+echo "Checking Apache configuration..."
+
+apache2ctl -t
+
+
+# ============================================================
+# START APACHE
+# ============================================================
+echo "Starting Apache..."
+
 exec "$@"
