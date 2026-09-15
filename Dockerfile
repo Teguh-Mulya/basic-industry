@@ -1,22 +1,26 @@
-# ==========================================
-# Stage 1: Build Frontend
-# ==========================================
-FROM node:24-alpine AS frontend
+# ============================================================
+# STAGE 1 - Build Frontend
+# ============================================================
+FROM node:22-alpine AS frontend
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+RUN if [ -f package-lock.json ]; then \
+        npm ci; \
+    else \
+        npm install; \
+    fi
 
 COPY . .
 
 RUN npm run build
 
 
-# ==========================================
-# Stage 2: Install PHP Dependencies
-# ==========================================
+# ============================================================
+# STAGE 2 - Install PHP Dependencies
+# ============================================================
 FROM composer:2.8 AS vendor
 
 WORKDIR /app
@@ -38,14 +42,17 @@ RUN composer dump-autoload \
     --no-dev
 
 
-# ==========================================
-# Stage 3: Laravel Application
-# ==========================================
+# ============================================================
+# STAGE 3 - Laravel Application
+# ============================================================
 FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-# Install PHP extensions and dependencies
+
+# ============================================================
+# Install PHP Extensions
+# ============================================================
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
@@ -73,34 +80,77 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache rewrite
-RUN a2enmod rewrite
 
-# Set Laravel public directory as Apache document root
-RUN sed -ri \
-    -e 's!/var/www/html!/var/www/html/public!g' \
-    /etc/apache2/sites-available/000-default.conf \
-    /etc/apache2/apache2.conf
+# ============================================================
+# FIX APACHE MPM
+# ============================================================
+RUN a2dismod mpm_event mpm_worker mpm_prefork || true \
+    && a2enmod mpm_prefork \
+    && a2enmod rewrite
 
-# Copy Laravel application
+
+# ============================================================
+# Apache Virtual Host
+# ============================================================
+RUN printf '%s\n' \
+    '<VirtualHost *:80>' \
+    '    DocumentRoot /var/www/html/public' \
+    '' \
+    '    <Directory /var/www/html/public>' \
+    '        AllowOverride All' \
+    '        Require all granted' \
+    '        Options -Indexes +FollowSymLinks' \
+    '    </Directory>' \
+    '' \
+    '    ErrorLog ${APACHE_LOG_DIR}/error.log' \
+    '    CustomLog ${APACHE_LOG_DIR}/access.log combined' \
+    '</VirtualHost>' \
+    > /etc/apache2/sites-available/000-default.conf
+
+
+# ============================================================
+# Copy Laravel Application
+# ============================================================
 COPY --from=vendor /app /var/www/html
 
-# Copy Vite production build
+
+# ============================================================
+# Copy Vite Build
+# ============================================================
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
-# Copy Railway startup script
+
+# ============================================================
+# Copy Entrypoint
+# ============================================================
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Laravel permissions
-RUN chown -R www-data:www-data \
-    /var/www/html/storage \
-    /var/www/html/bootstrap/cache
 
-# Railway will provide the actual PORT
+# ============================================================
+# Laravel Permission
+# ============================================================
+RUN mkdir -p \
+    /var/www/html/storage/framework/cache \
+    /var/www/html/storage/framework/sessions \
+    /var/www/html/storage/framework/views \
+    /var/www/html/storage/logs \
+    /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data \
+        /var/www/html/storage \
+        /var/www/html/bootstrap/cache
+
+
+# ============================================================
+# Railway Port
+# ============================================================
 EXPOSE 8080
 
+
+# ============================================================
+# Start Container
+# ============================================================
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["apache2-foreground"]
