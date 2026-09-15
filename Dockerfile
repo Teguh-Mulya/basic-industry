@@ -19,7 +19,7 @@ RUN npm run build
 
 
 # ============================================================
-# STAGE 2 - COMPOSER DEPENDENCIES
+# STAGE 2 - COMPOSER
 # ============================================================
 FROM composer:2.8 AS vendor
 
@@ -43,15 +43,15 @@ RUN composer dump-autoload \
 
 
 # ============================================================
-# STAGE 3 - LARAVEL + APACHE
+# STAGE 3 - LARAVEL
 # ============================================================
-FROM php:8.2-apache
+FROM php:8.2-cli
 
 WORKDIR /var/www/html
 
 
 # ============================================================
-# PHP EXTENSIONS
+# INSTALL PHP EXTENSIONS
 # ============================================================
 RUN apt-get update && apt-get install -y \
     libicu-dev \
@@ -82,44 +82,34 @@ RUN apt-get update && apt-get install -y \
 
 
 # ============================================================
-# APACHE MPM
-# ============================================================
-# Pastikan hanya mpm_prefork yang aktif.
-RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
-          /etc/apache2/mods-enabled/mpm_*.conf \
-    && a2enmod mpm_prefork \
-    && a2enmod rewrite
-
-
-# ============================================================
-# APACHE CONFIGURATION
-# ============================================================
-RUN printf '%s\n' \
-    '<VirtualHost *:80>' \
-    '    DocumentRoot /var/www/html/public' \
-    '' \
-    '    <Directory /var/www/html/public>' \
-    '        AllowOverride All' \
-    '        Require all granted' \
-    '        Options -Indexes +FollowSymLinks' \
-    '    </Directory>' \
-    '' \
-    '    ErrorLog ${APACHE_LOG_DIR}/error.log' \
-    '    CustomLog ${APACHE_LOG_DIR}/access.log combined' \
-    '</VirtualHost>' \
-    > /etc/apache2/sites-available/000-default.conf
-
-
-# ============================================================
-# LARAVEL APPLICATION
+# COPY LARAVEL
 # ============================================================
 COPY --from=vendor /app /var/www/html
 
 
 # ============================================================
-# VITE BUILD
+# COPY FRONTEND BUILD
 # ============================================================
 COPY --from=frontend /app/public/build /var/www/html/public/build
+
+
+# ============================================================
+# CREATE STORAGE DIRECTORIES
+# ============================================================
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
+
+# ============================================================
+# PERMISSION
+# ============================================================
+RUN chown -R www-data:www-data \
+    storage \
+    bootstrap/cache
 
 
 # ============================================================
@@ -128,20 +118,6 @@ COPY --from=frontend /app/public/build /var/www/html/public/build
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-
-# ============================================================
-# LARAVEL DIRECTORY
-# ============================================================
-RUN mkdir -p \
-    /var/www/html/storage/framework/cache \
-    /var/www/html/storage/framework/sessions \
-    /var/www/html/storage/framework/views \
-    /var/www/html/storage/logs \
-    /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data \
-        /var/www/html/storage \
-        /var/www/html/bootstrap/cache
 
 
 # ============================================================
@@ -155,4 +131,4 @@ EXPOSE 8080
 # ============================================================
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD ["apache2-foreground"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]

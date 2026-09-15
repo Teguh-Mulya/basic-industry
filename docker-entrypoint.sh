@@ -18,18 +18,6 @@ echo "Using PORT: $PORT"
 
 
 # ============================================================
-# APACHE PORT
-# ============================================================
-echo "Configuring Apache port..."
-
-sed -ri "s/^Listen [0-9]+/Listen ${PORT}/" \
-    /etc/apache2/ports.conf
-
-sed -ri "s/<VirtualHost \*:[0-9]+>/<VirtualHost *:${PORT}>/" \
-    /etc/apache2/sites-available/000-default.conf
-
-
-# ============================================================
 # LARAVEL STORAGE
 # ============================================================
 echo "Preparing Laravel storage..."
@@ -74,39 +62,25 @@ fi
 
 
 # ============================================================
-# DATABASE CONNECTION
+# LARAVEL CONFIGURATION
 # ============================================================
-echo "Waiting for database..."
+echo "Caching Laravel configuration..."
 
-MAX_ATTEMPTS=30
-ATTEMPT=1
+php artisan config:cache
 
-while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
-
-    if php artisan migrate:status > /dev/null 2>&1; then
-
-        echo "Database connection successful."
-
-        break
-
-    fi
-
-    echo "Database is not ready."
-    echo "Attempt $ATTEMPT/$MAX_ATTEMPTS..."
-
-    ATTEMPT=$((ATTEMPT + 1))
-
-    sleep 3
-
-done
+echo "Laravel configuration cached."
 
 
 # ============================================================
-# DATABASE MIGRATION
+# DATABASE
 # ============================================================
-if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
+echo "Checking database connection..."
 
-    echo "Running database migrations..."
+if php artisan migrate:status > /dev/null 2>&1; then
+
+    echo "Database connection successful."
+
+    echo "Running migrations..."
 
     php artisan migrate --force
 
@@ -114,32 +88,22 @@ if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
 
 else
 
-    echo "WARNING: Database connection failed."
+    echo "WARNING: Database is not connected."
+
+    echo "Laravel will start without running migrations."
 
 fi
 
 
 # ============================================================
-# LARAVEL CONFIG CACHE
+# START APPLICATION
 # ============================================================
-echo "Caching Laravel configuration..."
-
-php artisan config:cache
-
+echo "======================================"
 echo "Laravel is ready."
+echo "Starting Laravel server on port $PORT"
+echo "======================================"
 
 
-# ============================================================
-# APACHE CONFIG CHECK
-# ============================================================
-echo "Checking Apache configuration..."
-
-apache2ctl -t
-
-
-# ============================================================
-# START APACHE
-# ============================================================
-echo "Starting Apache..."
-
-exec "$@"
+exec php artisan serve \
+    --host=0.0.0.0 \
+    --port="$PORT"
